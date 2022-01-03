@@ -5,13 +5,6 @@
 
 /* global document, Office, Word */
 
-/* import {
-  totalWordCount, differentWord, numberofParagraphs,
-  numberofSentence, wordPerSentence, longWords,
-  wordFrequency, numberOfCharacterAll, numberOfCharacter,
-  charactersPerWord, keyWord, syllables,
-  syllablesPerWord, differentWordCommon, totalWordCountWithoutCommon, totalPuncMarks, sentencePerParagraph
-} from '../utils/english-analyze'; */
 import Worker from 'worker-loader!../worker/worker'
 
 let worker;
@@ -27,19 +20,21 @@ Office.onReady((info) => {
 function runWorker(data, dom) {
   worker.postMessage(JSON.stringify(data));
   worker.onmessage = e => {
-    const { resLettersCount, resCharsCount, resSyllablesCount, resPuncMarksCount, resWordsCount, resUniqueWordsCount, resSentsCount, resParsCount } = e.data;
-    dom.getElementById('letters').innerText = resLettersCount;
-    dom.getElementById('chars').innerText = resCharsCount;
-    dom.getElementById('words').innerText = resWordsCount;
-    dom.getElementById('unique').innerText = resUniqueWordsCount;
-    dom.getElementById('sentences').innerText = resSentsCount;
-    dom.getElementById('paragraphs').innerText = resParsCount;
-    dom.getElementById('punc').innerText = resPuncMarksCount;
-    dom.getElementById('sen-per-para').innerText = resSentsCount / resParsCount;
-    dom.getElementById('word-per-para').innerText = resWordsCount / resSentsCount;
-    dom.getElementById('letter-per-word').innerText = resLettersCount / resWordsCount;
-    dom.getElementById('syllables').innerText = resSyllablesCount;
-    dom.getElementById('syllables-per-word').innerText = resSyllablesCount / resWordsCount;
+    const { total_letter_count, total_char_count, total_syllable_count, total_punctuation_mark_count, total_word_count, unique_word_count, total_sentence_count, total_paragraph_count } = e.data;
+
+    dom.getElementById('letters').innerText = total_letter_count;
+    dom.getElementById('chars').innerText = total_char_count;
+    dom.getElementById('words').innerText = total_word_count;
+    dom.getElementById('unique').innerText = unique_word_count;
+    dom.getElementById('sentences').innerText = total_sentence_count;
+    dom.getElementById('paragraphs').innerText = total_paragraph_count;
+    dom.getElementById('punc').innerText = total_punctuation_mark_count;
+    dom.getElementById('sen-per-para').innerText = total_sentence_count / total_paragraph_count;
+    dom.getElementById('word-per-para').innerText = total_word_count / total_sentence_count;
+    dom.getElementById('letter-per-word').innerText = total_letter_count / total_word_count;
+    dom.getElementById('syllables').innerText = total_syllable_count;
+    dom.getElementById('syllables-per-word').innerText = total_syllable_count / total_word_count;
+
   };
 }
 

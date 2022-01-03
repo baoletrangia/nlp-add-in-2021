@@ -1,43 +1,57 @@
-import { preprocess, getSentences, countPuncMarks, getWords, getUniqueWords, wordAnalyze } from '../utils/lang-vn';
+import { preprocessing, tokenizeSentence, countPunctuationMark, getWord, getUniqueWords, analyzeWord } from '../utils/lang-vn';
 
 function analyze(paragraphs) {
-  const parTokens = preprocess(paragraphs);
-  const sentTokens = getSentences(parTokens);
+  const tokenizedParagraph = preprocessing(paragraphs);
+  const tokenizedSentence = tokenizeSentence(tokenizedParagraph);
+
   let words = [];
-  for (const token of sentTokens) {
-    words.push(...getWords(token));
-  }
-  const { lettersCount, syllablesCount } = wordAnalyze(words);
-  const wordsCount = words.length;
-  const sentsCount = sentTokens.length;
-  let charsCount = 0;
-  for (let paragraph of paragraphs) {
-    charsCount += paragraph.text.length;
+  for (const token of tokenizedSentence) {
+    words.push(...getWord(token));
   }
 
-  return {lettersCount, charsCount, syllablesCount, wordsCount, sentsCount, words};
+  const { letter_count, syllable_count } = analyzeWord(words);
+  const word_count = words.length;
+  const sentence_count = tokenizedSentence.length;
+  let character_count = 0;
+  for (let paragraph of paragraphs) {
+    character_count += paragraph.text.length;
+  }
+
+  return {letter_count, character_count, syllable_count, word_count, sentence_count, words};
 }
 
 self.addEventListener('message', e => {
   const { paragraphs, text } = JSON.parse(e.data);
-  let resLettersCount = 0;
-  let resCharsCount = 0;
-  let resSyllablesCount = 0;
-  let resWordsCount = 0;
-  let resSentsCount = 0;
-  let resPuncMarksCount = countPuncMarks(text);
-  let resParsCount = paragraphs.length;
-  let resUniqueWordsCount = 0;
-  for (let i = 0; i < resParsCount; i += 10) {
-    const {lettersCount, charsCount, syllablesCount, wordsCount, sentsCount, words} = analyze(paragraphs.slice(i, i + 10));
-    resLettersCount += lettersCount;
-    resCharsCount += charsCount;
-    resSyllablesCount += syllablesCount;
-    resWordsCount += wordsCount;
-    resSentsCount += sentsCount;
-    if (i + 10 >= resParsCount) {
-      resUniqueWordsCount += getUniqueWords(words).length;
+  let total_letter_count = 0;
+  let total_char_count = 0;
+  let total_syllable_count = 0;
+  let total_word_count = 0;
+  let total_sentence_count = 0;
+  let total_punctuation_mark_count = countPunctuationMark(text);
+  let total_paragraph_count = paragraphs.length;
+  let unique_word_count = 0;
+  for (let i = 0; i < total_paragraph_count; i += 10) {
+    const {letter_count, character_count, syllable_count, word_count, sentence_count, words} = analyze(paragraphs.slice(i, i + 10));
+
+    total_letter_count += letter_count;
+    total_char_count += character_count;
+    total_syllable_count += syllable_count;
+    total_word_count += word_count;
+    total_sentence_count += sentence_count;
+
+    if (i + 10 >= total_paragraph_count) {
+      unique_word_count += getUniqueWords(words).length;
     }
-    self.postMessage({ resLettersCount, resCharsCount, resSyllablesCount, resPuncMarksCount, resWordsCount, resUniqueWordsCount, resSentsCount, resParsCount }); // send back data
+
+    self.postMessage({
+      total_letter_count, 
+      total_char_count, 
+      total_syllable_count, 
+      total_punctuation_mark_count, 
+      total_word_count, 
+      unique_word_count, 
+      total_sentence_count, 
+      total_paragraph_count 
+    });
   }
 });
