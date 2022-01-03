@@ -1,0 +1,55 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contoso Task Pane Add-in</title>
+
+  <!-- Office JavaScript API -->
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+
+  <!-- For more information on Office UI Fabric, visit https://developer.microsoft.com/fabric. -->
+  <link rel="stylesheet"
+    href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css" />
+
+  <!-- Template styles -->
+  <link href="taskpane.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+  <section id="sideload-msg" class="ms-welcome__main">
+    <h2 class="ms-font-xl">Please sideload your add-in to see app body.</h2>
+  </section>
+  <main id="app-body" class="ms-welcome__main" style="display: none;">
+
+    <h2 class="ms-font-xl">Introduction to Natural Language Processing Project</h2>
+
+    <button role="button" id="run" class="ms-welcome__action ms-Button ms-Button--hero ms-font-xl">Analyze</button>
+    </br>
+      <table id='vn' class="tftable" border="1">
+      <tr><th>Statistics</th><th>Lang: VN</th></tr>
+      <tr><td>Letters</td><td id='letters'></td></tr>
+      <tr><td>Chars</td><td id='chars'></td></tr>
+      <tr><td>Words</td><td id='words'></td></tr>
+      <tr><td>Unique Words</td><td id='unique'></td></tr>
+      <tr><td>Sentences</td><td id='sentences'></td></tr>
+      <tr><td>Paragraphs</td><td id='paragraphs'></td></tr>
+      <tr><td>Punctuations</td><td id='punc'></td></tr>
+      <tr><td>Sentence per paragraph</td><td id='sen-per-para'></td></tr>
+      <tr><td>Words per sentence</td><td id='word-per-para'></td></tr>
+      <tr><td>Letters per word</td><td id='letter-per-word'></td></tr>
+      <tr><td>Syllables</td><td id='syllables'></td></tr>
+      <tr><td>Syllables per word</td><td id='syllables-per-word'></td></tr>
+      </table>
+  
+      
+  </main>
+</body>
+
+</html>
